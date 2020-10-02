@@ -22,6 +22,10 @@ export class ProveedorService {
     return this.http.get<Proveedor>(`catalog/getWholeSaleById/${idProveedor}`); 
   }
 
+  getProveedoresFiltro(texto: string): Observable<Proveedor[]>  {
+    return this.http.get<Proveedor[]>(`catalog/getWholeSalerByFilter/${texto}`); 
+  }
+
   updateProveedor(proveedor: Partial<Proveedor>): Observable<any>{
     const headerss = new HttpHeaders({'Content-Type': 'application/json'});
     return this.http.post<any>(`catalog/updateWholeSale`, JSON.stringify(proveedor), { headers: headerss});

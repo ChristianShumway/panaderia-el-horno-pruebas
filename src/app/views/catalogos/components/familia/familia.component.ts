@@ -22,6 +22,8 @@ export class FamiliaComponent implements OnInit {
   familiasTemp: Familia[] = [];
   idUsuarioLogeado;
   paginaActual= 0;
+  estatusData = 1;
+  dataSerach;
 
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   obs$: Observable<any>;
@@ -58,6 +60,7 @@ export class FamiliaComponent implements OnInit {
         console.log(this.familias);
         this.familiasTemp = this.familias;
         this.dataSource.data = this.familias;
+        this.estatusData = 1;
       }),
       error => console.log(error)
     );
@@ -71,22 +74,43 @@ export class FamiliaComponent implements OnInit {
 
   updateFilter(event) {
     const val = event.target.value.toLowerCase();
-    var columns = Object.keys(this.familiasTemp[0]);
-    columns.splice(columns.length - 1);
+    this.dataSerach = val;
+    if(val) {
+      this.familiaService.getFamiliasFiltro(val).subscribe(
+        result => {
+          if(result.length > 0) {
+            console.log(result);
+            this.dataSource.data = result;
+            this.paginator.length = result.length;
+            this.estatusData = 1;
+          } else {
+            this.dataSource.data = [];
+            this.paginator.length = 0;
+            this.estatusData = 0;
+            console.log('no se encontro');
+          }
+        },
+        error => console.log(error)
+      );
+    } else {
+      this.getFamilias(this.paginaActual);
+    }
+    // var columns = Object.keys(this.familiasTemp[0]);
+    // columns.splice(columns.length - 1);
 
-    if (!columns.length)
-      return;
+    // if (!columns.length)
+    //   return;
 
-    const rows = this.familiasTemp.filter(function(d) {
-      for (let i = 0; i <= columns.length; i++) {
-        let column = columns[i];
-        if (d[column] && d[column].toString().toLowerCase().indexOf(val) > -1) {
-          return true;
-        }
-      }
-    })
+    // const rows = this.familiasTemp.filter(function(d) {
+    //   for (let i = 0; i <= columns.length; i++) {
+    //     let column = columns[i];
+    //     if (d[column] && d[column].toString().toLowerCase().indexOf(val) > -1) {
+    //       return true;
+    //     }
+    //   }
+    // })
 
-    this.dataSource.data = rows;
+    // this.dataSource.data = rows;
     // console.log(this.dataSource.data);
   }
 

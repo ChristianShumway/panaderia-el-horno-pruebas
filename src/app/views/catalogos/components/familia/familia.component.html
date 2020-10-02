@@ -3,22 +3,14 @@
 </div>
 
 <mat-form-field class="margin-333" style="width: 98%">
-  <input 
-  matInput 
-  placeholder="Filtrar Familias" 
-  value=""
-  (keyup)='updateFilter($event)'>
+  <input matInput placeholder="Filtrar Familias" value="" (keyup)='updateFilter($event)'>
 </mat-form-field>
 
 
-<div fxLayout="row wrap" *ngIf = "obs$ | async as familias; else noFamilias">
-  <ng-container *ngIf = "familias.length; else loading">
-    <div
-      *ngFor="let familia of familias" 
-      fxFlex="100"
-      fxFlex.gt-sm="33"
-      fxFlex.sm="50">
-  
+<div fxLayout="row wrap" *ngIf="obs$ | async as familias; else noFamilias">
+  <ng-container *ngIf="familias.length; else loading">
+    <div *ngFor="let familia of familias" fxFlex="100" fxFlex.gt-sm="33" fxFlex.sm="50">
+
       <mat-card class="user-card p-0">
         <mat-card-title>
           <div class="card-title-text">
@@ -35,7 +27,7 @@
           </div>
           <mat-divider></mat-divider>
         </mat-card-title>
-  
+
         <mat-card-content>
           <div class="user-details">
             <p class="p-info-catalogss">{{familia.descripcion}}</p>
@@ -43,7 +35,7 @@
         </mat-card-content>
       </mat-card>
     </div>
-  </ng-container>  
+  </ng-container>
 
   <ng-template #noPerfiles>
     <div fxFlex="100" fxFlex.gt-sm="33" fxFlex.sm="50">
@@ -62,5 +54,13 @@
   </div>
 </ng-template>
 
+<div *ngIf="estatusData === 0">
+  <div class="wrap-loading-catalog">
+    <h2>No se encontró información referente a
+      <b style="color:red">{{dataSerach}}</b>
+    </h2>
+  </div>
+</div>
+
 <!-- <mat-paginator [pageSizeOptions]="[6, 12, 24, 100]"></mat-paginator> -->
-<mat-paginator [pageSizeOptions]="[10]" (page)="pageEvent($event)"></mat-paginator>  
+<mat-paginator [pageSizeOptions]="[10]" (page)="pageEvent($event)"></mat-paginator>

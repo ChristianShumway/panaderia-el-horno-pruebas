@@ -30,9 +30,12 @@
 
         <mat-card-content>
           <div class="user-details">
-            <p class="p-info-catalogss"><b>Familia:</b> {{articulo.familia.descripcion}}</p>
-            <p class="p-info-catalogss"><b>Precio Público:</b> {{articulo.precioPublico | transformCurrency}}</p>
-            <p class="p-info-catalogss"><b>Costo:</b> {{articulo.costo | transformCurrency}}</p>
+            <p class="p-info-catalogss">
+              <b>Familia:</b> {{articulo.familia.descripcion}}</p>
+            <p class="p-info-catalogss">
+              <b>Precio Público:</b> {{articulo.precioPublico | transformCurrency}}</p>
+            <p class="p-info-catalogss">
+              <b>Costo:</b> {{articulo.costo | transformCurrency}}</p>
           </div>
         </mat-card-content>
       </mat-card>
@@ -55,6 +58,14 @@
     <mat-spinner [diameter]="60"></mat-spinner>
   </div>
 </ng-template>
+
+<div *ngIf="estatusData === 0">
+  <div class="wrap-loading-catalog">
+    <h2>No se encontró información referente a
+      <b style="color:red">{{dataSerach}}</b>
+    </h2>
+  </div>
+</div>
 
 <!-- <mat-paginator [pageSizeOptions]="[6, 12, 24, 100]"></mat-paginator> -->
 <mat-paginator [pageSizeOptions]="[10]" (page)="pageEvent($event)"></mat-paginator>

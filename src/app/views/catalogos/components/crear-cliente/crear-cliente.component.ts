@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Empleado } from 'app/shared/models/empleado';
+import { Cliente } from 'app/shared/models/cliente';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { EmpleadoService } from 'app/shared/services/empleado.service';
+import { ClienteService } from 'app/shared/services/cliente.service';
 import { AutenticacionService } from 'app/shared/services/autenticacion.service';
 import { DatePipe } from '@angular/common';
-import { PerfilesService } from 'app/shared/services/perfiles.service';
-import { Perfil } from 'app/shared/models/perfil';
+import { MatBottomSheet } from '@angular/material';
+import { VerMapaComponent } from '../ver-mapa/ver-mapa.component';
 
 @Component({
   selector: 'app-crear-cliente',
@@ -20,64 +20,62 @@ export class CrearClienteComponent implements OnInit {
   idUsuarioLogeado;
   hoy = new Date();
   pipe = new DatePipe('en-US');
-  perfiles: Perfil[] = [];
 
   constructor(
     private router: Router,
     private snackBar: MatSnackBar,
-    private empleadoService: EmpleadoService,
+    private clienteService: ClienteService,
     private autenticacionService: AutenticacionService,
-    private perfilesService: PerfilesService
+    private bottomSheet: MatBottomSheet,
   ) { }
 
   ngOnInit() {
     this.getValidations();
-    this.getCatalogs();
     this.idUsuarioLogeado = this.autenticacionService.currentUserValue;
   }
 
-  getCatalogs() {
-    this.perfilesService.getSelectPerfil().subscribe(
-      (perfiles) => {
-        console.log(perfiles);
-        this.perfiles = perfiles;
-      },
-      error => console.log(error)
-    );
-  }
-
   getValidations() {
-    let contrasena = new FormControl('', [Validators.required,  Validators.minLength(8),]);
     this.clienteForm = new FormGroup({
-      nombre: new FormControl('', [
+      razonSocial: new FormControl('', [
         Validators.required,
       ]),
-      apellidoPaterno: new FormControl('', [
+      rfc: new FormControl('', [
         Validators.required,
       ]),
-      apellidoMaterno: new FormControl('', [
+      propietario: new FormControl('', [
         Validators.required,
       ]),
-      direccion: new FormControl('', [
+      calle: new FormControl('', [
+        Validators.required,
+      ]),
+      numero: new FormControl('', [
+        Validators.required,
+      ]),
+      colonia: new FormControl('', [
+        Validators.required,
+      ]),
+      codigoPostal: new FormControl('', [
         Validators.required,
       ]),
       telefono: new FormControl('', [
-        Validators.required,
-      ]),
-      nss: new FormControl('', [
-        Validators.required,
-      ]),
-      gafete: new FormControl('', [
-        Validators.required,
-      ]),
-      perfil: new FormControl('', [
         Validators.required,
       ]),
       email: new FormControl('', [
         Validators.required,
         Validators.email
       ]),
-      contrasena: contrasena,
+      ciudad: new FormControl('', [
+        Validators.required,
+      ]),
+      latitud: new FormControl('', [
+        Validators.required,
+      ]),
+      longitud: new FormControl('', [
+        Validators.required,
+      ]),
+      observacion: new FormControl('', [
+        Validators.required,
+      ]),
 
     })
   }
@@ -87,30 +85,29 @@ export class CrearClienteComponent implements OnInit {
     const myFormatedDate = this.pipe.transform(this.hoy, format);
 
     if (this.clienteForm.valid) {
-      const empleado: Empleado = {
-        idEmpleado: 0,
-        idEmpleadoModifico: this.idUsuarioLogeado,
-        // fechaCreacion: myFormatedDate,
+      const cliente: Cliente = {
+        idCliente: 0,
+        idEmpleadoModificacion: this.idUsuarioLogeado,
         ...this.clienteForm.value,
       };
 
-      console.log(empleado);
+      console.log(cliente);
 
-      this.empleadoService.createEmpleado(empleado).subscribe(
-        ((response: any) => {
-          console.log(response);
-          if (response.estatus === '05') {
-            this.router.navigate(['/catalogos/empleados']);
-            this.useAlerts(response.mensaje, ' ', 'success-dialog');
-          } else {
-            this.useAlerts(response.mensaje, ' ', 'error-dialog');
-          }
-        }),
-        (error => {
-          console.log(error);
-          this.useAlerts(error.message, ' ', 'error-dialog');
-        })
-      );
+      // this.clienteService.updateCliente(cliente).subscribe(
+      //   ((response: any) => {
+      //     console.log(response);
+      //     if (response.estatus === '05') {
+      //       this.router.navigate(['/catalogos/clientes']);
+      //       this.useAlerts(response.mensaje, ' ', 'success-dialog');
+      //     } else {
+      //       this.useAlerts(response.mensaje, ' ', 'error-dialog');
+      //     }
+      //   }),
+      //   (error => {
+      //     console.log(error);
+      //     this.useAlerts(error.message, ' ', 'error-dialog');
+      //   })
+      // );
     }
   }
 
@@ -121,6 +118,16 @@ export class CrearClienteComponent implements OnInit {
       horizontalPosition: 'right',
       panelClass: [className]
     });
+  }
+
+  viewMap(): void {
+    let sheet = this.bottomSheet.open(VerMapaComponent, {
+      data: {}
+    });
+
+    sheet.backdropClick().subscribe( () => {
+      console.log('clicked');
+    });  
   }
 
 

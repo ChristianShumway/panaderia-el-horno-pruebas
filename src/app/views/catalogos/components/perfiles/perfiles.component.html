@@ -54,5 +54,13 @@
   </div>
 </ng-template>
 
+<div *ngIf="estatusData === 0">
+  <div class="wrap-loading-catalog">
+    <h2>No se encontró información referente a
+      <b style="color:red">{{dataSerach}}</b>
+    </h2>
+  </div>
+</div>
+
 <!-- <mat-paginator [pageSizeOptions]="[6, 12, 24, 100]"></mat-paginator> -->
 <mat-paginator [pageSizeOptions]="[10]" (page)="pageEvent($event)"></mat-paginator>

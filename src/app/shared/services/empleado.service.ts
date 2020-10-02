@@ -21,6 +21,10 @@ export class EmpleadoService {
     return this.http.get<Empleado>(`dashboard/getEmployeById/${idEmpleado}`);
   }
 
+  getEmpleadososFiltro(texto: string): Observable<Empleado[]>  {
+    return this.http.get<Empleado[]>(`catalog/getEmployerByFilter/${texto}`); 
+  }
+
   createEmpleado(empleado: Empleado): Observable<any>{
     const headerss = new HttpHeaders({'Content-Type': 'application/json'});
     return this.http.post<any>(`catalog/createEmploye`, JSON.stringify(empleado), { headers: headerss});

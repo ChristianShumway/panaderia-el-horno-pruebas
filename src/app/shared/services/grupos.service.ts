@@ -23,6 +23,10 @@ export class GruposService {
     return this.http.get<Grupo>(`catalog/getGrupoById/${idGrupo}`); 
   }
 
+  getGruposFiltro(texto: string): Observable<Grupo[]>  {
+    return this.http.get<Grupo[]>(`catalog/getGrupoByFilter/${texto}`); 
+  }
+
   updateGrupo(grupo: Partial<Grupo>): Observable<any>{
     const headerss = new HttpHeaders({'Content-Type': 'application/json'});
     return this.http.post<any>(`catalog/updateGrupo`, JSON.stringify(grupo), { headers: headerss});

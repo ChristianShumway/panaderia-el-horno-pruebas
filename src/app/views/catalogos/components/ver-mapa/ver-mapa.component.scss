@@ -1,0 +1,25 @@
+.map-container {
+  width: 85vw;
+  position: relative;
+  height: 500px;
+}
+
+.wrap-map {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 30px;
+  // height: 500px;
+  // width: 100%;
+}
+
+.map-frame {
+  border: 2px solid black;
+  height: 100%;
+}
+
+#map {
+  height: 100%;
+}

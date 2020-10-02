@@ -29,6 +29,10 @@ export class ClienteService {
     return this.http.get<Cliente>(`catalog/getCustomerById/${idCliente}`); 
   }
 
+  getClientesFiltro(texto: string): Observable<Cliente[]>  {
+    return this.http.get<Cliente[]>(`catalog/getCustomerByFilter/${texto}`); 
+  }
+
   updateCliente(cliente: Partial<Cliente>): Observable<any>{
     const headerss = new HttpHeaders({'Content-Type': 'application/json'});
     return this.http.post<any>(`catalog/updateCustomer`, JSON.stringify(cliente), { headers: headerss});

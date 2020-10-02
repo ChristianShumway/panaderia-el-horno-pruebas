@@ -21,6 +21,10 @@ export class PerfilesService {
     return this.http.get<Perfil>(`catalog/getPerfilById/${idPerfil}`); 
   }
 
+  getPerfilesFiltro(texto: string): Observable<Perfil[]>  {
+    return this.http.get<Perfil[]>(`catalog/getPerfilByFilter/${texto}`); 
+  }
+
   getSelectPerfil(): Observable<Perfil[]>  {
     return this.http.get<Perfil[]>(`catalog/getSelectPerfil`); 
   }

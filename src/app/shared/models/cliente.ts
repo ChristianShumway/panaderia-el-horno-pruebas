@@ -1,6 +1,19 @@
 export interface Cliente {
   idCliente?: number;
-  idEmpleadoModifico?: number;
+  razonSocial: string;
+  propietario: string;
+  calle: string;
+  numero: string;
+  colonia: string;
+  codigoPostal: string;
+  telefono: string;
+  email: string;
+  rfc: string;
+  ciudad: string;
+  latitud: string;
+  longitud: string;
+  observacion: string;
+  idEmpleadoModificacion?: number;
 }
 
 // export interface Empleado {

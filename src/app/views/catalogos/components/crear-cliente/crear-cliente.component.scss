@@ -12,6 +12,10 @@
   text-align: right;
 }
 
-.cont-btns button:first-child{
+.cont-btns button {
   margin-right: 10px;
+}
+
+.cont-btns button:last-child{
+  margin-right: 0px;
 }

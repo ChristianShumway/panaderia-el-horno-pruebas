@@ -22,6 +22,10 @@ export class FamiliaService {
   getFamilia(idFamilia: number): Observable<Familia>  {
     return this.http.get<Familia>(`catalog/getFamiliaById/${idFamilia}`); 
   }
+
+  getFamiliasFiltro(texto: string): Observable<Familia[]>  {
+    return this.http.get<Familia[]>(`catalog/getFamiliaByFilter/${texto}`); 
+  }
   
   getSelectFamilia(): Observable<Familia[]>  {
     return this.http.get<Familia[]>(`catalog/getSelectFamilia`); 

@@ -35,6 +35,7 @@ import { ModificarProveedorComponent } from './components/modificar-proveedor/mo
 import { ClientesComponent } from './components/clientes/clientes.component';
 import { CrearClienteComponent } from './components/crear-cliente/crear-cliente.component';
 import { ModificarClienteComponent } from './components/modificar-cliente/modificar-cliente.component';
+import { VerMapaComponent } from './components/ver-mapa/ver-mapa.component';
 
 export let options: Partial<IConfig> | (() => Partial<IConfig>);
 
@@ -60,7 +61,8 @@ export let options: Partial<IConfig> | (() => Partial<IConfig>);
     ModificarProveedorComponent, 
     ClientesComponent, 
     CrearClienteComponent, 
-    ModificarClienteComponent
+    ModificarClienteComponent, 
+    VerMapaComponent
   ],
   imports: [
     CommonModule,
@@ -76,6 +78,9 @@ export let options: Partial<IConfig> | (() => Partial<IConfig>);
     SharedModule,
     QuillModule,
     NgxMaskModule.forRoot(options),
+  ],
+  entryComponents: [
+    VerMapaComponent
   ]
 })
 export class CatalogosModule { }

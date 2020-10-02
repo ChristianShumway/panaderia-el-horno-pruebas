@@ -21,6 +21,10 @@ export class ArticuloService {
     return this.http.get<Articulo>(`catalog/getArticuloById/${idArticulo}`); 
   }
 
+  getArticulosFiltro(texto: string): Observable<Articulo[]>  {
+    return this.http.get<Articulo[]>(`catalog/getArticleByFilter/${texto}`); 
+  }
+
   // getSelectEstatusArticulo
   getSelectEstatusArticulo(): Observable<EstatusArticulo[]>  {
     return this.http.get<EstatusArticulo[]>(`catalog/getSelectEstatusArticulo`); 

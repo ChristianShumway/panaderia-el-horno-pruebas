@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatProgressBar, MatButton } from '@angular/material';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import { AutenticacionService } from './../../../../shared/services/autenticacion.service';
-import { Usuario } from './../../../../shared/models/usuario';
+import { Empleado } from '../../../../shared/models/empleado';
 import { Router } from '@angular/router';
 
 @Component({
@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 export class RecuperarComponent implements OnInit {
   
   userEmail;
-  usuario: Usuario
+  usuario: Empleado
   @ViewChild(MatProgressBar, {static: false}) progressBar: MatProgressBar;
   @ViewChild(MatButton, {static: false}) submitButton: MatButton;
 

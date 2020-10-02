@@ -1,0 +1,81 @@
+<mat-card class="p-0 container-create-user">
+  <mat-card-title class="">
+    <div class="card-title-text">Formulario para el registro de un artículo</div>
+    <mat-divider></mat-divider>
+  </mat-card-title>
+
+  <mat-card-content>
+    <form [formGroup]="articuloForm" (submit)="createArticle()">
+      <div fxLayout="row wrap">
+        <div fxFlex="100" fxFlex.gt-xs="100">
+          <div class="pb-1">
+            <mat-form-field class="full-width">
+              <input matInput name="nombre" formControlName="nombre" placeholder="Nombre">
+            </mat-form-field>
+            <div class="validaciones">
+              <small *ngIf="articuloForm.controls['nombre'].hasError('required') && articuloForm.controls['nombre'].touched" class="form-error-msg">
+                Nombre del artículo es un campo requerido
+              </small>
+            </div>
+          </div>
+          <div class="pb-1">
+            <mat-form-field class="full-width">
+              <input matInput name="precioPublico" formControlName="precioPublico" placeholder="Precio al Público"  mask="separator.2" thousandSeparator=",">
+            </mat-form-field>
+            <div class="validaciones">
+              <small *ngIf="articuloForm.controls['precioPublico'].hasError('required') && articuloForm.controls['precioPublico'].touched"
+                class="form-error-msg">
+                Precio al público es un campo requerido
+              </small>
+            </div>
+          </div>
+          <div class="pb-1">
+            <mat-form-field class="full-width">
+              <input matInput name="costo" formControlName="costo" placeholder="Costo"  mask="separator.2" thousandSeparator=",">
+            </mat-form-field>
+            <div class="validaciones">
+              <small *ngIf="articuloForm.controls['costo'].hasError('required') && articuloForm.controls['costo'].touched" class="form-error-msg">
+                Costo es un campo requerido
+              </small>
+            </div>
+          </div>
+          <div class="pb-1">
+            <mat-form-field class="full-width">
+              <mat-label>Familia</mat-label>
+              <mat-select formControlName="familia" required>
+                <mat-option *ngFor="let familia of familias" [value]="familia">
+                  {{familia.descripcion}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div class="validaciones">
+              <small *ngIf="articuloForm.controls['familia'].hasError('required') && articuloForm.controls['familia'].touched" class="form-error-msg">
+                Familia del artículo es un campo requerido
+              </small>
+            </div>
+          </div>
+          <div class="pb-1">
+            <mat-form-field class="full-width">
+              <mat-label>Estatus del Artículo</mat-label>
+              <mat-select formControlName="estatusArticulo" required>
+                <mat-option *ngFor="let estatus of catalogEstatus" [value]="estatus">
+                  {{estatus.descripcion}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div class="validaciones">
+              <small *ngIf="articuloForm.controls['estatusArticulo'].hasError('required') && articuloForm.controls['estatusArticulo'].touched" class="form-error-msg">
+                Estatus del artículo es un campo requerido
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cont-btns">
+        <button mat-raised-button color="primary" [disabled]="articuloForm.invalid" type="submit">Agregar</button>
+        <button mat-raised-button [routerLink]="'/catalogos/articulos'">Cancelar</button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

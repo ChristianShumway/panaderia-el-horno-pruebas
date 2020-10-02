@@ -4,58 +4,70 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from './../../../environments/environment';
-import { Usuario } from './../models/usuario';
+import { Empleado } from '../models/empleado';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AutenticacionService {
 
-  private currentUserSubject: BehaviorSubject<Usuario>;
-  public currentUser: Observable<Usuario>;
+  private currentUserSubject: BehaviorSubject<Empleado>;
+  public currentUser: Observable<Empleado>;
+  private currentProfileSubject: BehaviorSubject<Empleado>;
+  public currentProfile: Observable<Empleado>;
 
   constructor(
     private http: HttpClient
   ) {
-    this.currentUserSubject = new BehaviorSubject<Usuario>(JSON.parse(localStorage.getItem('currentUserSession')));
+    this.currentUserSubject = new BehaviorSubject<Empleado>(JSON.parse(localStorage.getItem('currentUserSession')));
     this.currentUser = this.currentUserSubject.asObservable();
+    this.currentProfileSubject = new BehaviorSubject<Empleado>(JSON.parse(localStorage.getItem('perfilEmpleado')));
+    this.currentProfile = this.currentProfileSubject.asObservable();
   }
 
-  public get currentUserValue(): Usuario {
+  public get currentUserValue(): Empleado {
     return this.currentUserSubject.value;
+  }
+
+  public get currentProfileValue(): Empleado {
+    return this.currentProfileSubject.value;
+  }
+
+  getUser(idUser) {
+    return this.http.get(`dashboard/getEmployeById/${idUser}`);
   }
 
   loginUser(user) {
     const headerss = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<any>(`${environment.apiURL}/dashboard/autenticacion`, JSON.stringify(user), { headers: headerss })
-      .pipe(map(user => {
-        // store user details and jwt token in local storage to keep user logged in between page refreshes
-        localStorage.setItem('currentUserSession', JSON.stringify(user.idUsuario));
-        this.currentUserSubject.next(user.idUsuario);
+    return this.http.post<any>(`dashboard/autenticacion`, JSON.stringify(user), { headers: headerss })
+      .pipe(map( user => {
+        this.currentUserSubject.next(user.idEmpleado);
+        this.currentProfileSubject.next(user.perfil);
         return user;
       }));
+  }
+
+  restoreUser(user) {
+    const headerss = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<any>(`dashboard/restoreEmploye`, JSON.stringify(user), { headers: headerss })
+  }
+
+  updatePassword(user) {
+    const headerss = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<any>(`dashboard/changePassword`, JSON.stringify(user), { headers: headerss })
   }
 
   logout() {
     // remove user from local storage and set current user to null
     localStorage.removeItem('currentUserSession');
+    localStorage.removeItem('perfilEmpleado');
     this.currentUserSubject.next(null);
+    this.currentProfileSubject.next(null);
   }
 
   userAuthenticated(idPerfil: number, idOpcion: number) {
-    return this.http.get(`${environment.apiURL}/config/isAuthenticated/${idPerfil}/${idOpcion}`);
+    return this.http.get(`config/isAuthenticated/${idPerfil}/${idOpcion}`);
   }
-
-  restoreUser(user) {
-    const headerss = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<any>(`${environment.apiURL}/user/restoreUser`, JSON.stringify(user), { headers: headerss })
-  }
-
-  updatePassword(user) {
-    const headerss = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<any>(`${environment.apiURL}/user/changePassword`, JSON.stringify(user), { headers: headerss })
-  }
-
 
 }
 

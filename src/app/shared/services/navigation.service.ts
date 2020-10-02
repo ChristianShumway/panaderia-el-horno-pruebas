@@ -1,5 +1,7 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
+import { HttpClient } from '@angular/common/http';
+import { AutenticacionService } from './autenticacion.service';
 
 interface IMenuItem {
   type: string; // Possible values: link/dropDown/icon/separator/extLink
@@ -26,112 +28,137 @@ interface IBadge {
 
 @Injectable()
 export class NavigationService {
-  constructor() {}
-  iconMenu: IMenuItem[] = [
-    {
-      name: "HOME",
-      type: "icon",
-      tooltip: "Home",
-      icon: "home",
-      state: "home"
-    },
-    {
-      name: "PROFILE",
-      type: "icon",
-      tooltip: "Profile",
-      icon: "person",
-      state: "profile/overview"
-    },
+  
+  iconMenu: IMenuItem[] = [];
+
+  // Icon menu TITLE at the very top of navigation.
+  // This title will appear if any icon type item is present in menu.
+  iconTypeMenuTitle: string = "Frequently Accessed";
+  // sets iconMenu as default;
+
+  menuItems = new BehaviorSubject<IMenuItem[]>(this.iconMenu);
+  // navigation component has subscribed to this Observable
+  menuItems$ = this.menuItems.asObservable();
+
+
+  constructor(
+    private http: HttpClient,
+    private autenticacionService: AutenticacionService
+  ) {
+    const currentProfile =   this.autenticacionService.currentProfileValue;
+    // console.log(currentProfile);
+    this.getMenu(currentProfile);
+  }
+
+
+  getMenu(profile) {
+    return this.http.get<IMenuItem[]>(`dashboard/getMenu/${profile.idPerfil}`).subscribe(
+      result => {
+        // console.log(result);
+        this.iconMenu = result;
+        this.menuItems.next(this.iconMenu);
+      }
+    );
+  }
+
+  // iconMenu: IMenuItem[] = [
+  //   {
+  //     name: "HOME",
+  //     type: "icon",
+  //     tooltip: "Home",
+  //     icon: "home",
+  //     state: "home"
+  //   },
+  //   {
+  //     name: "PROFILE",
+  //     type: "icon",
+  //     tooltip: "Profile",
+  //     icon: "person",
+  //     state: "profile/overview"
+  //   },
    
-    {
-      type: "separator",
-      name: "Main Items"
-    },
-    {
-      name: "DASHBOARD",
-      type: "dropDown",
-      tooltip: "Dashboard",
-      icon: "dashboard",
-      state: "dashboard",
-      sub: [
-        { name: "Default", state: "default" },
-        { name: "Analytics", state: "analytics" },
-        { name: "Cryptocurrency", state: "crypto" },
-        { name: "Dark Cards", state: "dark" }
-      ]
-    },
-    {
-      name: "PROFILE",
-      type: "dropDown",
-      tooltip: "Profile",
-      icon: "person",
-      state: "profile",
-      badges: [{ color: "primary", value: "2" }],
-      sub: [
-        { name: "OVERVIEW", state: "overview" },
-        { name: "SETTINGS", state: "settings" },
-        { name: "BLANK", state: "blank" }
-      ]
-    },
-    {
-      name: "CHARTS",
-      type: "dropDown",
-      tooltip: "Charts",
-      icon: "show_chart",
-      sub: [
-        { name: "Chart js", state: "charts" }
-      ]
-    },
-    // {
-    //   name: "CHARTS",
-    //   type: "link",
-    //   tooltip: "Charts",
-    //   icon: "show_chart",
-    //   state: "charts"
-    // },
+  //   {
+  //     type: "separator",
+  //     name: "Main Items"
+  //   },
+  //   {
+  //     name: "DASHBOARD",
+  //     type: "dropDown",
+  //     tooltip: "Dashboard",
+  //     icon: "dashboard",
+  //     state: "dashboard",
+  //     sub: [
+  //       { name: "Default", state: "default" },
+  //       { name: "Analytics", state: "analytics" },
+  //       { name: "Cryptocurrency", state: "crypto" },
+  //       { name: "Dark Cards", state: "dark" }
+  //     ]
+  //   },
+  //   {
+  //     name: "PROFILE",
+  //     type: "dropDown",
+  //     tooltip: "Profile",
+  //     icon: "person",
+  //     state: "profile",
+  //     badges: [{ color: "primary", value: "2" }],
+  //     sub: [
+  //       { name: "OVERVIEW", state: "overview" },
+  //       { name: "SETTINGS", state: "settings" },
+  //       { name: "BLANK", state: "blank" }
+  //     ]
+  //   },
+  //   {
+  //     name: "CHARTS",
+  //     type: "dropDown",
+  //     tooltip: "Charts",
+  //     icon: "show_chart",
+  //     sub: [
+  //       { name: "Chart js", state: "charts" }
+  //     ]
+  //   },
    
-    {
-      name: "SESSIONS",
-      type: "dropDown",
-      tooltip: "Pages",
-      icon: "view_carousel",
-      state: "sessions",
-      sub: [
-        { name: "SIGNUP", state: "signup" },
-        { name: "Signup 2", state: "signup2" },
-        { name: "Signup 3", state: "signup3" },
-        { name: "Signup 4", state: "signup4" },
-        { name: "SIGNIN", state: "signin" },
-        { name: "Signin 2", state: "signin2" },
-        { name: "Signin 3", state: "signin3" },
-        { name: "Signin 4", state: "signin4" },
-        { name: "FORGOT", state: "forgot-password" },
-        { name: "LOCKSCREEN", state: "lockscreen" },
-        { name: "NOTFOUND", state: "404" },
-        { name: "ERROR", state: "error" }
-      ]
-    },
-    {
-      name: "OTHERS",
-      type: "dropDown",
-      tooltip: "Others",
-      icon: "blur_on",
-      state: "others",
-      sub: [
-        { name: "GALLERY", state: "gallery" },
-        { name: "PRICINGS", state: "pricing" },
-        { name: "USERS", state: "users" },
-        { name: "BLANK", state: "blank" }
-      ]
-    },
-    {
-      name: "DOC",
-      type: "extLink",
-      tooltip: "Documentation",
-      icon: "library_books",
-      state: "http://demos.ui-lib.com/egret-doc/"
-    }
-  ];
+  //   {
+  //     name: "SESSIONS",
+  //     type: "dropDown",
+  //     tooltip: "Pages",
+  //     icon: "view_carousel",
+  //     state: "sessions",
+  //     sub: [
+  //       { name: "SIGNUP", state: "signup" },
+  //       { name: "Signup 2", state: "signup2" },
+  //       { name: "Signup 3", state: "signup3" },
+  //       { name: "Signup 4", state: "signup4" },
+  //       { name: "SIGNIN", state: "signin" },
+  //       { name: "Signin 2", state: "signin2" },
+  //       { name: "Signin 3", state: "signin3" },
+  //       { name: "Signin 4", state: "signin4" },
+  //       { name: "FORGOT", state: "forgot-password" },
+  //       { name: "LOCKSCREEN", state: "lockscreen" },
+  //       { name: "NOTFOUND", state: "404" },
+  //       { name: "ERROR", state: "error" }
+  //     ]
+  //   },
+  //   {
+  //     name: "OTHERS",
+  //     type: "dropDown",
+  //     tooltip: "Others",
+  //     icon: "blur_on",
+  //     state: "others",
+  //     sub: [
+  //       { name: "GALLERY", state: "gallery" },
+  //       { name: "PRICINGS", state: "pricing" },
+  //       { name: "USERS", state: "users" },
+  //       { name: "BLANK", state: "blank" }
+  //     ]
+  //   },
+  //   {
+  //     name: "DOC",
+  //     type: "extLink",
+  //     tooltip: "Documentation",
+  //     icon: "library_books",
+  //     state: "http://demos.ui-lib.com/egret-doc/"
+  //   }
+  // ];
 
   separatorMenu: IMenuItem[] = [
     {
@@ -288,14 +315,6 @@ export class NavigationService {
       state: "http://demos.ui-lib.com/egret-doc/"
     }
   ];
-
-  // Icon menu TITLE at the very top of navigation.
-  // This title will appear if any icon type item is present in menu.
-  iconTypeMenuTitle: string = "Frequently Accessed";
-  // sets iconMenu as default;
-  menuItems = new BehaviorSubject<IMenuItem[]>(this.iconMenu);
-  // navigation component has subscribed to this Observable
-  menuItems$ = this.menuItems.asObservable();
 
   // Customizer component uses this method to change menu.
   // You can remove this method and customizer component.

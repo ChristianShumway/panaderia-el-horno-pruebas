@@ -6,6 +6,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import { first } from 'rxjs/operators';
 
 import { AutenticacionService } from './../../../../shared/services/autenticacion.service';
+import { Empleado } from '../../../../shared/models/empleado';
 
 
 @Component({
@@ -38,7 +39,6 @@ export class LoginComponent implements OnInit {
     this.signinForm = new FormGroup({
       email: new FormControl('',[ Validators.required, Validators.email]),
       contrasena: new FormControl('', [Validators.required, Validators.minLength(8)]),
-      // rememberMe: new FormControl(false)
     });
 
     // get return url from route parameters or default to '/'
@@ -46,37 +46,35 @@ export class LoginComponent implements OnInit {
   }
 
   signin() {
-    console.log(this.signinForm.value);
-    this.useAlerts('Acceso de usuario correcto', ' ', 'success-dialog');
-    this.router.navigate(['dashboard']);
-    
-    // this.autenticacionService.loginUser(this.signinForm.value)
-    // .pipe(first()) 
-    // .subscribe(
-    //   user => {
-    //     console.log(user);
-    //     if(user.email){
-    //       if(user.cambiarContrasena == 0){
-    //         this.useAlerts('Acceso de usuario correcto', ' ', 'success-dialog');
-    //         this.router.navigate(['dashboard']);
-    //         this.existeUsuario = true;
-    //       } else if(user.cambiarContrasena == 1) {
-    //         this.useAlerts('Tienes que cambiar tu contraseña temporal', ' ', 'warning-dialog');
-    //         this.router.navigate(['/login/restaurar-password', user.idUsuario]);
-    //       }
-    //     } else {
-    //       this.useAlerts('Usuario no encontrado', ' ', 'error-dialog');
-    //       this.submitButton.disabled = false;
-    //       this.progressBar.mode = 'determinate';
-    //     }
-    //   },
-    //   error => {
-    //     console.log(error);
-    //     this.useAlerts('Acceso de usuario incorrecto', ' ', 'error-dialog');
-    //     this.submitButton.disabled = false;
-    //     this.progressBar.mode = 'determinate';
-    //   }
-    // )
+    this.autenticacionService.loginUser(this.signinForm.value)
+    .pipe(first()) 
+    .subscribe(
+      (user: Empleado) => {
+        // console.log(user);
+        if(user.email){
+          if(user.cambiarContrasena === 0){
+            localStorage.setItem('currentUserSession', JSON.stringify(user.idEmpleado));
+            localStorage.setItem('perfilEmpleado', JSON.stringify(user.perfil));
+            this.useAlerts('Acceso de usuario correcto', ' ', 'success-dialog');
+            this.router.navigate(['dashboard']);
+            this.existeUsuario = true;
+          } else if(user.cambiarContrasena === 1) {
+            this.useAlerts('Tienes que cambiar tu contraseña temporal', ' ', 'warning-dialog');
+            this.router.navigate(['/login/restaurar-password', user.idEmpleado]);
+          }
+        } else {
+          this.useAlerts('Usuario no encontrado', ' ', 'error-dialog');
+          this.submitButton.disabled = false;
+          this.progressBar.mode = 'determinate';
+        }
+      },
+      error => {
+        console.log(error);
+        this.useAlerts('Acceso de usuario incorrecto', ' ', 'error-dialog');
+        this.submitButton.disabled = false;
+        this.progressBar.mode = 'determinate';
+      }
+    )
     
     this.submitButton.disabled = true;
     this.progressBar.mode = 'indeterminate';

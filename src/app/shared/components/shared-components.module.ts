@@ -34,7 +34,7 @@ import { EgretSidebarComponent, EgretSidebarTogglerDirective } from './egret-sid
 import { BottomSheetShareComponent } from './bottom-sheet-share/bottom-sheet-share.component';
 import { EgretExampleViewerComponent } from './example-viewer/example-viewer.component';
 import { EgretExampleViewerTemplateComponent } from './example-viewer-template/example-viewer-template.component';
-
+import { ModalEliminarComponent } from './modal-eliminar/modal-eliminar.component';
 
 const components = [
   HeaderTopComponent,
@@ -54,7 +54,8 @@ const components = [
   EgretSidebarTogglerDirective,
   BottomSheetShareComponent,
   EgretExampleViewerComponent,
-  EgretExampleViewerTemplateComponent
+  EgretExampleViewerTemplateComponent,
+  ModalEliminarComponent
 ]
 
 @NgModule({
@@ -71,7 +72,7 @@ const components = [
     SharedMaterialModule
   ],
   declarations: components,
-  entryComponents: [AppComfirmComponent, AppLoaderComponent, BottomSheetShareComponent],
+  entryComponents: [AppComfirmComponent, AppLoaderComponent, BottomSheetShareComponent, ModalEliminarComponent],
   exports: components
 })
 export class SharedComponentsModule {}

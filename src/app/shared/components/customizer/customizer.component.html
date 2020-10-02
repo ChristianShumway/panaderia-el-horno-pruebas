@@ -23,7 +23,7 @@
       </div>
     </mat-card-title>
     <mat-card-content *ngIf="viewMode === 'json'" style="min-height: 100vh">
-        <!-- <pre class="text-muted">{{this.layoutConf | json}}</pre> -->
+        <pre class="text-muted">{{this.layoutConf | json}}</pre>
         <pre><code [egretHighlight]="this.layoutConf | json"></code></pre>
         <div>
           <span fxFlex></span>

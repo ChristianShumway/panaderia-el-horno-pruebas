@@ -1,0 +1,13 @@
+.wrap-buttons{
+  text-align: right;
+}
+
+mat-card{
+  height: 180px !important;
+}
+
+@media screen and (max-width:599px) {
+  mat-card{
+    height: initial !important;
+  }
+}

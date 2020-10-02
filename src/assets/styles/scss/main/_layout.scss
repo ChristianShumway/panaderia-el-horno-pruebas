@@ -198,6 +198,26 @@
 }
 
 // PERSONALIZADOS
+.custom-dialog-container-user{
+  overflow: auto !important;
+}
+
+.custom-dialog-container-user .mat-dialog-container,
+.custom-dialog-container-bitacora .mat-dialog-container {
+  padding: 24px 0 !important;
+}
+
+.custom-dialog-container-delete .mat-dialog-container {
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.custom-dialog-container-bitacora{
+  overflow: auto !important;
+  max-height: 80vh;
+  width: 50vw !important;
+}
+
 .error-dialog {
   color: white !important;
   background-color: rgba(211, 47, 47, .9) !important;
@@ -241,6 +261,14 @@
     color: white !important;
     font-size: 22px;
   }
+}
+
+.wrap-loading-catalog{
+  width: 100%;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 @media (max-width: 959px) {

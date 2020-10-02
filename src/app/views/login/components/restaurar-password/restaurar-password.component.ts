@@ -7,7 +7,7 @@ import { CustomValidators } from 'ng2-validation';
 
 import { AutenticacionService } from './../../../../shared/services/autenticacion.service';
 // import { UsuariosService } from './../../../../shared/services/usuarios.service';
-import { Usuario } from '../../../../shared/models/usuario';
+import { Empleado } from '../../../../shared/models/empleado';
 
 @Component({
   selector: 'app-restaurar-password',
@@ -23,7 +23,7 @@ export class RestaurarPasswordComponent implements OnInit {
   returnUrl: string;
   formData = {};
   existeUsuario= false;
-  usuario: Usuario;
+  usuario: Empleado;
 
   constructor(
     private router: Router,
@@ -54,23 +54,25 @@ export class RestaurarPasswordComponent implements OnInit {
     this.route.params.subscribe( (data: Params) => {
       if(data.id){
         console.log(data);
-        // this.usuariosService.getUsuario(data.id).subscribe(
-        //   (user: Usuario) => {
-        //     this.usuario = user;
-        //     if(this.usuario.cambiarContrasena === 0) {
-        //       this.router.navigate(['/login']);
-        //     }
-        //   },
-        //   error => console.log(error)
-        // );
+        this.autenticacionService.getUser(data.id).subscribe(
+          (user: Empleado) => {
+            this.usuario = user;
+            console.log(this.usuario);
+            // if(this.usuario.cambiarContrasena === 0) {
+            //   this.router.navigate(['/login']);
+            // }
+          },
+          error => console.log(error)
+        );
       }
     })
   }
 
   restorePassword() {
+    // console.log(this.passwordForm.value);
     if(this.passwordForm.valid){
       const usuario = {
-        idUsuario: this.usuario.idUsuario,
+        idEmpleado: this.usuario.idEmpleado,
         ...this.passwordForm.value,
       };
       console.log(usuario);

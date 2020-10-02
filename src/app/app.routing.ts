@@ -35,6 +35,11 @@ export const rootRouterConfig: Routes = [
         loadChildren: () => import('./views/dashboard/dashboard.module').then(m => m.DashboardModule), 
         data: { title: 'Dashboard', breadcrumb: 'DASHBOARD'}
       },
+      { 
+        path: 'catalogos', 
+        loadChildren: () => import('./views/catalogos/catalogos.module').then(m => m.CatalogosModule), 
+        data: { title: 'Catálogos', breadcrumb: 'Catálogos'}
+      },
       {
         path: 'profile', 
         loadChildren: () => import('./views/profile/profile.module').then(m => m.ProfileModule), 

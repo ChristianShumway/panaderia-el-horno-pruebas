@@ -1,0 +1,60 @@
+<div class="wrap-buttons">
+  <a mat-raised-button matTooltip="Creación de un nuevo artículo" matTooltipPosition="left" color="primary" [routerLink]="'/catalogos/crear-articulo'">Crear Artículo</a>
+</div>
+
+<mat-form-field class="margin-333" style="width: 98%">
+  <input matInput placeholder="Filtrar Artículos" value="" (keyup)='updateFilter($event)'>
+</mat-form-field>
+
+
+<div fxLayout="row wrap" *ngIf="obs$ | async as articulos; else noArticulos">
+  <ng-container *ngIf="articulos.length; else loading">
+    <div *ngFor="let articulo of articulos" fxFlex="100" fxFlex.gt-sm="33" fxFlex.sm="50">
+
+      <mat-card class="user-card p-0">
+        <mat-card-title>
+          <div class="card-title-text">
+            <!-- <a class="toolbar-avatar md mr-1"><img [src]="user.imagen" alt=""></a> -->
+            <span class="title-card-catalogs">{{articulo.nombre}}</span>
+            <span fxFlex></span>
+            <button mat-icon-button [matMenuTriggerFor]="articuloMenu" class="">
+              <mat-icon class="">more_vert</mat-icon>
+            </button>
+            <mat-menu #articuloMenu="matMenu">
+              <button mat-menu-item [routerLink]="['/catalogos/modificar-articulo', articulo.idArticulo]">Editar</button>
+              <!-- <button mat-menu-item (click)="openDialoAlertDelete(articulo.idArticulo)">Eliminar</button> -->
+            </mat-menu>
+          </div>
+          <mat-divider></mat-divider>
+        </mat-card-title>
+
+        <mat-card-content>
+          <div class="user-details">
+            <p class="p-info-catalogss"><b>Familia:</b> {{articulo.familia.descripcion}}</p>
+            <p class="p-info-catalogss"><b>Precio Público:</b> {{articulo.precioPublico | transformCurrency}}</p>
+            <p class="p-info-catalogss"><b>Costo:</b> {{articulo.costo | transformCurrency}}</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </ng-container>
+
+  <ng-template #noArticulos>
+    <div fxFlex="100" fxFlex.gt-sm="33" fxFlex.sm="50">
+      <mat-card class="user-card p-0">
+        <mat-card-content>
+          <!-- <img src="assets/images/icons/no-close.png" alt="no found"> -->
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </ng-template>
+</div>
+
+<ng-template #loading>
+  <div class="wrap-loading-catalog">
+    <mat-spinner [diameter]="60"></mat-spinner>
+  </div>
+</ng-template>
+
+<!-- <mat-paginator [pageSizeOptions]="[6, 12, 24, 100]"></mat-paginator> -->
+<mat-paginator [pageSizeOptions]="[10]" (page)="pageEvent($event)"></mat-paginator>
